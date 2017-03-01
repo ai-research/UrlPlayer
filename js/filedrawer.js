@@ -1,42 +1,23 @@
 jQuery(function ($) {
     var fullPath = window.location.search.split("path=")[1] || '/';
-    fullPath = window.location.origin + fullPath.replace(/^\//, '/');
+    fullPath = window.location.origin + fullPath.replace(/^\/?/, '/');
 
     $('#filedrawer').on('click', 'a', openUrl);
     loadFiles(fullPath);
 
     function loadFiles(path) {
-        // path = fixPath(path);
+        path = fixPath(path);
         $.ajax({
-            path: path,
+            url: path,
             complete: function (res) {
-                var list = res.responseText.match(/href="([^"]*)"/g),
-                    ul = $('<ul>');
-
-                list.forEach(function (name) {
-                    name = name.replace(/^href="/, '').replace(/"$/, '');
-                    if (name) {
-                        ul.append(createLi(name));
-                    }
-                });
-
-                fullPath = path.replace(/\/$/, '/');
-                $('#filedrawer').empty().append(ul);
+                $('#filedrawer').html(res.responseText);
+                fullPath = path.replace(/\/?$/, '/');
             }
         });
     }
 
     function fixPath(name) {
-        return name.replace(/\/[^\/]*\/\.\.\//g, '/');
-    }
-
-    function createLi(name) {
-        var li = $('<li>'),
-            link = $('<a>');
-        link.attr('href', name);
-        link.text(name.replace(/^.*\/[^.]/, ''));
-        li.append(link);
-        return li;
+        return name.replace(/\/[^\/]*\/\.\.\/$/, '/');
     }
 
     function openUrl(e) {

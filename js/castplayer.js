@@ -287,6 +287,7 @@ CastPlayer.prototype.onMediaDiscovered = function(how, mediaSession) {
   }
 
   if( this.castPlayerState == PLAYER_STATE.PLAYING ) {
+
     // start progress timer
     this.startProgressTimer(this.incrementMediaTime);
   }
@@ -336,7 +337,11 @@ CastPlayer.prototype.incrementMediaTime = function() {
   $('#player_current_time').html(this.formatTime(this.currentMediaTime));
   if (this.currentMediaSession.playerState == PLAYER_STATE.PLAYING){
     if( this.currentMediaTime < this.currentMediaDuration ) {
-      this.currentMediaTime += 1;
+     var audio = $('audio')[0],
+        currentTime = this.session.media[0].getEstimatedTime();
+      audio.currentTime = currentTime;
+      audio.play();
+      this.currentMediaTime = currentTime;
       $('#player_current_time').html(this.formatTime(this.currentMediaTime));
       $('#player_seek_range').attr('max', this.currentMediaSession.media.duration);
 	    $('#player_seek_range').val(this.currentMediaTime);

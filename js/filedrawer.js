@@ -31,6 +31,8 @@ jQuery(function ($) {
         } else {
             $('#url').val(url);
             $('#modal_play').click();
+            $('audio source').attr('src', url);
+            $('audio')[0].load();
         }
     }
 });

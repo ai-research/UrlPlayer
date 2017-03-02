@@ -338,9 +338,13 @@ CastPlayer.prototype.incrementMediaTime = function() {
   if (this.currentMediaSession.playerState == PLAYER_STATE.PLAYING){
     if( this.currentMediaTime < this.currentMediaDuration ) {
      var audio = $('audio')[0],
-        currentTime = this.session.media[0].getEstimatedTime();
-      audio.currentTime = currentTime;
-      audio.play();
+        currentTime = this.session.media[0].getEstimatedTime(),
+        audioDiff = Math.abs(audio.currentTime - currentTime);
+      if (audioDiff > 0.25) {
+        audio.currentTime = currentTime;
+        audio.play();
+      }
+      console.log('AudioDiff', audioDiff);
       this.currentMediaTime = currentTime;
       $('#player_current_time').html(this.formatTime(this.currentMediaTime));
       $('#player_seek_range').attr('max', this.currentMediaSession.media.duration);

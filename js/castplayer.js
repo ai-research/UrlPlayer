@@ -338,7 +338,7 @@ CastPlayer.prototype.incrementMediaTime = function() {
   if (this.currentMediaSession.playerState == PLAYER_STATE.PLAYING){
     if( this.currentMediaTime < this.currentMediaDuration ) {
      var audio = $('audio')[0],
-        currentTime = this.session.media[0].getEstimatedTime(),
+        currentTime = this.session.media[0].getEstimatedTime() + 0.1,
         audioDiff = Math.abs(audio.currentTime - currentTime);
       if (audioDiff > 0.25) {
         audio.currentTime = currentTime;
